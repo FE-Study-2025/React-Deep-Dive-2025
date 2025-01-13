@@ -66,6 +66,8 @@ function TextOrHeading({ isHeading, children, }): PropsWithChildren<{isHeading: 
 
 [리액트 파이버 코드](https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiber.js#L134)
 
+[React 파이버 아키텍처 분석](https://d2.naver.com/helloworld/2690975)
+
 https://medium.com/@sht02048/%EC%83%9D%EA%B0%81%EB%B3%B4%EB%8B%A4-%EB%8D%94-%EC%84%AC%EC%84%B8%ED%95%9C-%EB%A6%AC%EC%95%A1%ED%8A%B8-%EB%A0%8C%EB%8D%94%EB%A7%81-%EA%B3%BC%EC%A0%95-feat-%EB%A6%AC%EC%95%A1%ED%8A%B8-%ED%8C%8C%EC%9D%B4%EB%B2%84-44075084381a
 
 https://velog.io/@hoon0123/%EB%AA%A8%EB%8D%98-%EB%A6%AC%EC%95%A1%ED%8A%B8-Deep-Dive-%EC%8A%A4%ED%84%B0%EB%94%943%EB%A6%AC%EC%95%A1%ED%8A%B8-%ED%8C%8C%EC%9D%B4%EB%B2%84
