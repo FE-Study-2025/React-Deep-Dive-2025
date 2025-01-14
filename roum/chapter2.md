@@ -3,7 +3,7 @@
 c.f. SSR, CSR, SSG(HTML 파일을 빌드 시점에 미리 생성), ISR (정적 사이트 생성의 일부를 동적으로 업데이트)
 1. 브라우저 렌더링 
 : HTML, CSS, JS를 해석하여 화면에 시각적인 결과물을 보여주는 과정
-![alt text](image.png)
+<img src="https://github.com/React-Deep-Dive-2024/React-Deep-Dive/raw/main/roum/image.png" />
 
 | 단계            | 설명                                                                 |
 |-----------------|----------------------------------------------------------------------|
