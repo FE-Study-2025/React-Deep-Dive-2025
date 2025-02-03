@@ -144,14 +144,26 @@ sequenceDiagram
 - renderToStaticMarkup
   - renderToString과 유사하게 리액트 컴포넌트를 기준으 로 HTML 문자열을 만든다
   - 루트 요소에 추가한 data- reactroot와 같은 리액트에서만 사용하는 추가적인 DOM 속성을 만들지 않는다
-- renderToNodeStream
+- [renderToNodeStream](https://18.react.dev/reference/react-dom/server/renderToNodeStream) Deprecated!
+  - React 공식 문서에 따르면: renderToPipeableStream 으로 마이그레이션하라고함
+    > As of React 18, this method buffers all of its output, so it doesn't actually provide any streaming benefits. This is why it's recommended that you migrate to renderToPipeableStream instead.
   - renderToString과 renderToStaticMarkup은 브라우저에 서도 실행할 수는 있지만 renderToNodeStream은 브라우저에서 사용하는 것이 완전히 불가능하다
   - renderToNodeStream의 결과물은 Node.js의 ReadableStream
   - 큰 크기의 데이터를 청크 단위로 분리해 순차적으로 처리할 수 있다
-- renderToStaticNodeStream
-  - renderToNodeStream과 결과물은 동일하지만 리액트 자 바스크립트에 필요한 리액트 속성이 제공되지 않는다.
+- [renderToStaticNodeStream](https://18.react.dev/reference/react-dom/server/renderToStaticNodeStream)
+  - 공식문서에 deprecated 표시는 없지만 사용하지 않는 것이 좋다. 관련 [discussion](https://github.com/reactwg/react-18/discussions/22)
+  - renderToNodeStream과 결과물은 동일하지만 리액트 자바스크립트에 필요한 리액트 속성이 제공되지 않는다.
 - hydrate
-  - renderToString과 renderToNodeStream으로 생성된 HTML 콘텐 츠에 자바스크립트 핸들러나 이벤트를 붙이는 역할
+  - renderToString과 renderToNodeStream으로 생성된 HTML 콘텐츠에 자바스크립트 핸들러나 이벤트를 붙이는 역할
+
+### React 19에서 server API는 4개가 제공됨
+
+- [renderToPipeableStream](https://react.dev/reference/react-dom/server/renderToPipeableStream)
+- [renderToReadableStream](https://react.dev/reference/react-dom/server/renderToReadableStream)
+- [renderToStaticMarkup](https://react.dev/reference/react-dom/server/renderToReadableStream)
+- [renderToString](https://react.dev/reference/react-dom/server/renderToString)
+
+- [Next.js 아닌 React SSR에 대하여](https://cheri.tistory.com/298)
 
 ### 서버 사이드 렌더링 예제 프로젝트
 
