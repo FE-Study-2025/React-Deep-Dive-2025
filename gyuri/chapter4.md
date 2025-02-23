@@ -143,7 +143,7 @@ sequenceDiagram
   - 최초의 페이지를 HTML로 먼저 렌더링하는 역할
 - renderToStaticMarkup
   - renderToString과 유사하게 리액트 컴포넌트를 기준으 로 HTML 문자열을 만든다
-  - 루트 요소에 추가한 data- reactroot와 같은 리액트에서만 사용하는 추가적인 DOM 속성을 만들지 않는다
+  - 루트 요소에 추가한 data-reactroot와 같은 리액트에서만 사용하는 추가적인 DOM 속성을 만들지 않는다
 - [renderToNodeStream](https://18.react.dev/reference/react-dom/server/renderToNodeStream) Deprecated!
   - React 공식 문서에 따르면: renderToPipeableStream 으로 마이그레이션하라고함
     > As of React 18, this method buffers all of its output, so it doesn't actually provide any streaming benefits. This is why it's recommended that you migrate to renderToPipeableStream instead.
@@ -379,7 +379,7 @@ Next.js에서는 서버 사이드 렌더링 지원을 위한 몇 가지 데이�
 - 전역 스타일
 - 컴포넌트 레벨 CSS
 - SCSS와 SASS
-- CSS—in—JS : styled-jsx, styled- components, Emotion, Linaria
+- CSS—in—JS : styled-jsx, styled-components, Emotion, Linaria
 
 styled-components의 스타일을 Next.js에 추가하려면 다음과 같은 코드가 필요하다. \_document.tsx가 없 다면 해당 파일을 만든 후 다음과 같이 추가해 보자.
 
