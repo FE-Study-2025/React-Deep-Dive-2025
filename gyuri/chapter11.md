@@ -45,7 +45,7 @@
 
   - 미리 서버에서 DOM을 만들어 옴 -> 클라에서는 이렇게 만들어진 DOM을 기준으로 하이드레이션 진행 -> 브라우저에서는 상태를 추적, 이벤트 핸들러를 DOM에 추가, 응답에 따라 렌더링 트리를 변경함
 
-- Next.js SSR의 한계: 리액트가 클라이언트 중심으로 돌아가기 때문에,,
+- Next.js SSR의 한계: 리액트가 클라이언트 중심으로 돌아가기 때문에,
 
   - 자바스크립트 번들 크기가 0인 컴포넌트를 만들 수 없음
   - 백엔드 리소스에 대한 직접적인 접근 불가능
@@ -58,14 +58,14 @@
 
 ### 서버 컴포넌트란?
 
+- 하나의 언어, 하나의 프레임워크, 그리고 하나의 API와 개념을 사용하면서 서버와 클라이언트 모두에서 컴포넌트를 렌더링할 수 있는 기법 (일부는 클라이언트에서, 일부는 서버에서 렌더링)
 - CSR과 SSR 구조의 장점을 모두 취하고자 등장
 - 서버 컴포넌트를 활용해 서버에서 렌더링할 수 있는 컴포넌트는 서버에서 완성해서 제공받은 다음, 클라이언트 컴포넌트는 서버 사이드 렌더링으로 초기 HTML을 빠르게 전달받을 수 있음
-- 하나의 언어, 하나의 프레임워크, 그리고 하나의 API와 개념을 사용하면서 서버와 클라이언트 모두에서 컴포넌트를 렌더링할 수 있는 기법
 
 #### 종류
 
 1. 서버 컴포넌트
-   - 상태를 가질 수 없음. 요청이 오면 그 순간 서버에서 딱 한 번 실행될 뿐이므로
+   - 요청이 오면 그 순간 서버에서 딱 한 번 실행될 뿐이므로 상태를 가질 수 없음.
    - 렌더링 생명주기도 사용할 수 없음. 한번 렌더링되면 끝이기 때문
    - DB, 내부 서비스, 파일 시스템 등 서버에만 있는 데이터를 `async/await`로 접근할 수 있음
 2. 클라이언트 컴포넌트
@@ -82,6 +82,15 @@
    - 서버 컴포넌트에서 클라이언트 컴포넌트로 props를 넘길 때 반드시 직렬화 가능한 데이터를 넘겨야 함
 3. 브라우저가 리액트 컴포넌트 트리를 구성함
 
+> 직렬화 가능한 데이터 : 원시 타입(Primitive types)과 일반 객체/배열
+> 직렬화 불가능한 데이터 :
+
+- function: () => console.log("함수"),
+- date: new Date(),
+- map: new Map(),
+- set: new Set(),
+- symbol: Symbol("심볼"),
+
 ## Next.js에서의 리액트 서버 컴포넌트
 
 - `page.js`와 `layout.js`는 반드시 서버 컴포넌트여야 함
@@ -90,7 +99,19 @@
 
 - 서버에서 데이터를 직접 불러올 수 있게 됨
 - 컴포넌트가 비동기적으로 작동하는 것도 가능
-- fetch API를 확장해 같은 서버 컴포넌트 트리 내에서 동일한 요청이 있다면 재요청이 발생하지 않도록 요청 중복을 방지함
+- fetch API를 확장해 같은 서버 컴포넌트 트리 내에서 동일한 요청이 있다면 재요청이 발생하지 않도록 요청 중복을 방지함 (SWR이나 react-query와 유사)
+
+> Pages Router vs App Router
+
+1. Pages Router (pages 디렉토리)
+
+- getServerSideProps, getStaticProps 등은 여전히 사용 가능
+- 기존 프로젝트들의 하위 호환성을 위해 계속 지원됨
+
+2. App Router (app 디렉토리)
+
+- 이러한 데이터 페칭 메서드들을 사용할 수 없음
+- 대신 새로운 fetch API와 서버 컴포넌트를 사용
 
 ### 정적 렌더링과 동적 렌더링
 
@@ -124,6 +145,7 @@
   - TTFB, FCP 개선에 큰 도움을 줌
 - 방법
   1. 경로에 `loading.tsx`배치
+  - 자동으로 suspense를 배치함
   2. 좀 더 세분화된 제어를 하고 싶다면 `Suspense`를 직접 활용
 
 ## 웹팩의 대항마, 터보팩의 등장(beta)
@@ -135,10 +157,58 @@
 
 ## 서버 액션(alpha)
 
+(리액트19 에서는 [Server Functions](https://react.dev/reference/rsc/server-functions)로 이름이 바뀜)
+
 - API를 굳이 생성하지 않더라도 함수 수준에서 서버에 직접 접근해 데이터 요청 등을 수행할 수 있는 기능
   - 서버 액션을 사용하면, API 엔드포인트를 생성하지 않고도 컴포넌트 내에서 비동기 함수를 직접 정의할 수 있습니다.
 - 서버 컴포넌트와 다르게, 특정 함수 실행 그 자체만을 서버에서 수행할 수 있다는 장점이 있음
+- 서버 액션은 서버에서 정의되고 실행되지만, 클라이언트 컴포넌트에서 이를 트리거하는 것이 가능하다.
 - 폼의 뮤테이션을 할 수 있게 해주는 넥스트의 아주 강력한 기능
+
+[Server Actions and Mutations](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#passing-actions-as-props)
+
+```tsx
+"use server";
+
+export async function create() {}
+```
+
+```tsx
+"use client";
+
+import { create } from "./actions";
+
+export function Button() {
+  return <button onClick={() => create()}>Create</button>;
+}
+```
+
+서버 컴포넌트에서 클라이언트 컴포넌트로 직접적으로 함수를 props로 전달할 수는 없다.
+대신 서버 액션 전달 가능하다.
+
+- 서버 액션 사용하기
+
+```tsx
+// actions.ts
+"use server";
+export async function handleServerAction(data: string) {
+  // 서버에서 실행될 로직
+  console.log("서버에서 처리:", data);
+}
+
+// ServerComponent.tsx
+import { handleServerAction } from "./actions";
+
+const ServerComponent = () => {
+  return <ClientButton action={handleServerAction} />;
+};
+
+// ClientButton.tsx
+("use client");
+const ClientButton = ({ action }) => {
+  return <button onClick={() => action("데이터")}>서버 액션 실행</button>;
+};
+```
 
 ### form의 action
 
@@ -149,10 +219,57 @@
 ### startTransition과의 연동
 
 - `useTransition`에서 제공하는 `startTransition`에서도 서버 액션을 활용할 수 있음
+- 서버 액션이 실행되는 동안 UI가 응답성을 유지할 수 있게 해줌
+
+```tsx
+"use client";
+
+import { useTransition } from "react";
+import { updateData } from "./actions";
+
+function ExampleComponent() {
+  const [isPending, startTransition] = useTransition();
+
+  return (
+    <div>
+      {isPending ? <p>업데이트 중...</p> : null}
+      <button
+        onClick={() => {
+          startTransition(async () => {
+            await updateData(); // 서버 액션
+          });
+        }}
+      >
+        데이터 업데이트
+      </button>
+    </div>
+  );
+}
+```
 
 ### server mutation이 없는 작업
 
 - server mutation이 필요하다면 반드시 서버 액션을 `useTransition`과 함께 사용해야 하지만 별도의 server mutation을 실행하지 않는다면 바로 이벤트 핸들러에 넣어도 됨
+
+```tsx
+// Server Mutation이 필요한 경우 (useTransition 사용 필요)
+const updateUserProfile = async () => {
+  await db.users.update({
+    // 데이터베이스 변경
+    where: { id: userId },
+    data: { name: newName },
+  });
+};
+
+// Server Mutation이 없는 경우 (일반 이벤트 핸들러 사용 가능)
+const fetchUserData = async () => {
+  const data = await db.users.findFirst({
+    // 단순 데이터 조회
+    where: { id: userId },
+  });
+  return data;
+};
+```
 
 ### 서버 액션 사용 시 주의할 점
 
@@ -160,3 +277,25 @@
 - 서버에서만 실행될 수 있는 자원은 반드시 파일 단위로 분리해야 함
   - 클라이언트 컴포넌트에서 서버 액션을 쓰고 싶을 때는 앞의 `startTransition` 예제처럼 'use server'로 서버 액션만 모여 있는 파일을 별도로 import해야 함
   - 서버 액션을 `import`하는 것뿐만 아니라, props 형태로 서버 액션을 클라이언트 컴포넌트에 넘기는 것 또한 가능함.
+
+## Next.js 13 코드 맛보기
+
+기본적으로 모든 컴포넌트는 정적으로 렌더링되며, 데이터 가져오기 방식에 따라 동작이 결정됨.
+
+### getServerSideProps 와 비슷한 서버 사이드 렌더링 구현해보기
+
+fetch로 변경
+
+### getStaticProps와 비슷한 정적 페이지 렌더링 구현해보기
+
+빌드해보면 정적 페이지로 구성되어있음
+
+cache: 'force-cache' 옵션: 이전의 getStaticProps와 유사한 역할을 합니다. 이 옵션을 사용하면 빌드 시점에 데이터를 가져와서 캐싱합니다.
+generateStaticParams(): 이전의 getStaticPaths와 유사한 역할을 하며, 동적 경로에 대한 정적 페이지를 생성할 때 사용합니다.
+
+### 로딩, 스트리밍, 서스펜스
+
+스트리밍과 서스펜스를 활용해 컴포넌트가 렌더링 중이라는 것을 나타낼 수 있다.
+
+- 기본적으로 loading 지원
+- Suspense로 세밀하게 쪼개서 보여줄 수 있음
