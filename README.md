@@ -1,5 +1,16 @@
 # 📚 React-Deep-Dive-2025
 
+
+<a href="https://www.gitanimals.org/">
+      <img
+        src="https://render.gitanimals.org/guilds/687142409908081937/draw"
+        width="600"
+        height="300"
+        alt="gitanimals"
+      />
+</a>
+
+
 ## 스터디 소개
 - **주제**: 모던 리액트 딥 다이브 책 완독
 - **기간**: 2025년 1월 14일 ~ 2025년 3월 18일 (10주)
