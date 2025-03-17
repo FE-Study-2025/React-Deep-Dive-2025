@@ -7,16 +7,58 @@
 - 왜 위험한가?
   - script가 실행될 수 있다면 웹사이트 개발자가 할 수 있는 모든 작업을 함께 수행할 수 있으며, 쿠키를 획득해 사용자의 로그인 세션 등을 탈취하거나 사용자의 데이터를 변경하는 등 각 종 위험성이 있다.
 
+```html
+<p>사용자가 글을 작성했습니다.</p>
+<script>
+  alert('XSS1)
+</script>
+```
+
 ### 🗡️ dangerouslySetInnerHTML prop
 
 - 특정 브라우저 DOM의 innerHTML을 특정한 내용으로 교체할 수 있는 방법
 - 왜 위험한가?
+
   - 인수로 받는 문자열에는 제한이 없다는 것
+
+- 일반적으로 게시판과 같이 사용자나 관리자가 입력한 내용을 브라우저에 표시하는 용도로 사용
+- dangerouslySetlnnerHTML이 인수로 받는 문자열에는 제한이 없다
+
+```ts
+const html = `<span><svg/onload=alert(origin)></span>`;
+
+function App() {
+  return <div dangerouslySetInnerHTML={{ html }} />;
+}
+
+export default App;
+```
 
 ### 🗡️ useRef를 활용한 직접 삽입
 
 - 왜 위험한가?
   - useRef를 활용하면 직접 DOM에 접근할 수 있으므로 이 DOM에 앞서와 비슷한 방식으로 innerHTML에 보안 취약점이 있는 스크립트를 삽입하면 동일한 문제가 발생
+
+```ts
+const html = "<span><svg/onload=alert(origin)></span>";
+
+function App() {
+  const divRef = useRef<HTMLDivElement>(nuU);
+
+  useEffect(() => {
+    if (divRef.current) {
+      divRef.current.innerHTML = html;
+    }
+  });
+
+  return <div ref={divRef} />;
+}
+```
+
+이외에는
+
+- `<a>` 태그에 잘못된 href를 삽입
+- onclick, onload 이벤트
 
 ### 🛡️ 리액트에서 XSS 문제를 피하는 방법
 
@@ -36,6 +78,33 @@
     -H "Content-Type: application/json" \
     -d '{"name": "John Doe", "email": "john@example.com"}'
     ```
+
+**sanitize-html**
+
+- 허용 목록(allow list) 방식 : 허용할 태그와 목록을 일일히 나열
+
+사용자가 콘텐츠를 저장할 때도 한번 이스케이프 과정을 거치는 것이 더 효율적이고 안전
+치환 과정은 되도록 서버에서 수행하는 것이 좋다.
+스크립트나 curl 등으로 직접 요청하는 경우에는 스크립트에서 실행하는 이스케이프 과정을 생략하고 바로 저장될 가능성이 있기 때문이다.
+
+쿼리스트링에 있는 내용을 그대로 실행하거나 보여주는 경우 에도 보안 취약점이 발생할 수 있다
+query, GET 파라미터，서버에 저장된 사용자가 입력한 데이터 등 외부에 존재하는 모든 코드를 위험한 코드로 간주하고 이를 적절하게 처리하는 것이 좋다.
+
+> 리액트의JSX 데이터바인딩
+> 리액트는 XSS를 방어하기 위해 이스케이프 작업이 존재한다.
+
+```ts
+const html = '<span><svg/onload=alert(origin)x/span>,
+
+function App() {
+return <div id={htnil}>{html}</div>
+
+}
+```
+
+> `<div>{html}</div>`와 같이 HTML에 직접 표시되는 textcontent와 HTML 속성값에 대해서는 리액트가 기본적으로 이스케이프 작업을 해준다.
+>
+> dangerouslySetlnnerHTML이나 props로 넘겨받는 값의 경우 개발자의 활용도에 따라 원본 값이 필요할 수 있기 때문에 이러한 작업이 수행되지 않는다.
 
 ## 📍 getServerSideProps와 서버 컴포넌트를 주의하자
 
