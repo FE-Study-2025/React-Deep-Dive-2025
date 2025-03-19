@@ -63,6 +63,7 @@ function App() {
 ### 🛡️ 리액트에서 XSS 문제를 피하는 방법
 
 - 제3자가 삽입할 수 있는 HTML을 안전한 HTML 코드로 한 번 치환하는 것 => `새니타이즈(sanitize)` or `이스케이프(escape)`
+- 예시 [marp](https://github.com/marp-team/marp-core/blob/main/src/html/allowlist.ts)
 - 라이브러리 사용해서 구현 가능
   - [DOMpurity](https://github.com/cure53/DOMPurify)
   - [sanitize-html](https://github.com/apostrophecms/sanitize-html)
